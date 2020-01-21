@@ -1,0 +1,99 @@
+CREATE TABLE SECTEUR(
+        CodeSecteur    INT,
+        NomResponsable VARCHAR(10),
+        TelResponsable VARCHAR(10),
+        CONSTRAINT SECTEUR_PK PRIMARY KEY (CodeSecteur)
+);
+
+CREATE TABLE TYPE(
+        codeType    INT,
+        libelleType VARCHAR(50),
+        CONSTRAINT TYPE_PK PRIMARY KEY (codeType)
+);
+
+CREATE TABLE ECOLE(
+        CodeEcole    INT,
+        NomEcole     VARCHAR(25),
+        AdresseEcole VARCHAR(25),
+        TelAgent     VARCHAR(10),
+        CONSTRAINT ECOLE_PK PRIMARY KEY (CodeEcole)
+);
+
+CREATE TABLE AGENT(
+        MatAgent     INT,
+        NomAgent     VARCHAR(25),
+        AdresseAgent VARCHAR(25),
+        TelAgent     VARCHAR(25),
+        NoRestaurant INT,
+        CodeEcole    INT,
+        CONSTRAINT AGENT_PK PRIMARY KEY (MatAgent)
+);
+
+CREATE TABLE ABSENCE(
+        idAbsence        INT,
+        dateDebutAbsence DATE,
+        dateFinAbsence   DATE,
+        codeType         INT,
+        MatAgent         INT
+	,CONSTRAINT ABSENCE_PK PRIMARY KEY (idAbsence)
+);
+
+CREATE TABLE RESTAURANT(
+        NoRestaurant      INT,
+        NomRestaurant     VARCHAR(50),
+        AdresseRestaurant VARCHAR(50),
+        TelRestaurant     VARCHAR(10),
+        CodeSecteur       INT,
+        MatAgent          INT,
+        CONSTRAINT RESTAURANT_PK PRIMARY KEY (NoRestaurant)
+);
+
+CREATE TABLE ACCUEUILLIR(
+        CodeEcole    INT,
+        NoRestaurant INT,
+        CONSTRAINT ACCUEUILLIR_PK PRIMARY KEY (CodeEcole,NoRestaurant)
+);
+
+ALTER TABLE AGENT
+	ADD CONSTRAINT AGENT_RESTAURANT0_FK
+	FOREIGN KEY (NoRestaurant)
+	REFERENCES RESTAURANT(NoRestaurant);
+
+ALTER TABLE AGENT
+	ADD CONSTRAINT AGENT_ECOLE1_FK
+	FOREIGN KEY (CodeEcole)
+	REFERENCES ECOLE(CodeEcole);
+
+ALTER TABLE ABSENCE
+	ADD CONSTRAINT ABSENCE_TYPE0_FK
+	FOREIGN KEY (codeType)
+	REFERENCES TYPE(codeType);
+
+ALTER TABLE ABSENCE
+	ADD CONSTRAINT ABSENCE_AGENT1_FK
+	FOREIGN KEY (MatAgent)
+	REFERENCES AGENT(MatAgent);
+
+ALTER TABLE RESTAURANT
+	ADD CONSTRAINT RESTAURANT_SECTEUR0_FK
+	FOREIGN KEY (CodeSecteur)
+	REFERENCES SECTEUR(CodeSecteur);
+
+ALTER TABLE RESTAURANT
+	ADD CONSTRAINT RESTAURANT_AGENT1_FK
+	FOREIGN KEY (MatAgent)
+	REFERENCES AGENT(MatAgent);
+
+ALTER TABLE RESTAURANT
+	ADD CONSTRAINT RESTAURANT_AGENT0_AK
+	UNIQUE (MatAgent);
+
+ALTER TABLE ACCUEUILLIR
+	ADD CONSTRAINT ACCUEUILLIR_ECOLE0_FK
+	FOREIGN KEY (CodeEcole)
+	REFERENCES ECOLE(CodeEcole);
+
+ALTER TABLE ACCUEUILLIR
+	ADD CONSTRAINT ACCUEUILLIR_RESTAURANT1_FK
+	FOREIGN KEY (NoRestaurant)
+	REFERENCES RESTAURANT(NoRestaurant);
