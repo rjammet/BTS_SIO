@@ -37,4 +37,8 @@ if (isset($_POST['formlogin'])) {
         echo 'Veuillez renseigner tout les champs';
     }
 }
+<<<<<<< HEAD
 ?>
+=======
+?>
+>>>>>>> Siroz555-master-patch-31893
